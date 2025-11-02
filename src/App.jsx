@@ -1,44 +1,38 @@
 // src/App.jsx
 import { useState } from 'react';
-import Task from './components/Task'; // Import our new component
-
-// This is our "fake" data for now
-const DUMMY_TASKS = [
-  {
-    id: 1,
-    name: 'Work on React project',
-    tags: ['coding', 'school', 'important'],
-  },
-  {
-    id: 2,
-    name: 'Feed the cat',
-    tags: ['chores', 'animals'],
-  },
-  {
-    id: 3,
-    name: 'Go for a run',
-    tags: ['health'],
-  },
-];
+import Navbar from './components/Navbar';
+import TasksView from './views/TasksView';
+import SummaryView from './views/SummaryView';
+import AboutView from './views/AboutView';
 
 function App() {
-  // We use 'useState' to store our list of tasks
-  const [tasks, setTasks] = useState(DUMMY_TASKS);
+  // This state will track which view is active
+  const [currentView, setCurrentView] = useState('tasks');
+
+  // This function will render the correct view component
+  const renderView = () => {
+    switch (currentView) {
+      case 'tasks':
+        return <TasksView />;
+      case 'summary':
+        return <SummaryView />;
+      case 'about':
+        return <AboutView />;
+      default:
+        return <TasksView />;
+    }
+  };
 
   return (
     <div className="app-container">
-      <h1>Time Tracker</h1>
-
-      {/* This is the list of our tasks */}
-      <div className="task-list">
-        {tasks.map((task) => (
-          <Task 
-            key={task.id} 
-            name={task.name} 
-            tags={task.tags} 
-          />
-        ))}
-      </div>
+      <Navbar onNavigate={setCurrentView} currentView={currentView} />
+      <header>
+        {/* We can add a dynamic title later */}
+        <h1>Time Tracker</h1>
+      </header>
+      <main>
+        {renderView()}
+      </main>
     </div>
   );
 }
